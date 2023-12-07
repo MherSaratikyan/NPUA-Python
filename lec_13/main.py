@@ -16,8 +16,8 @@ def measure_execution_time(func):
 def create_large_text_file(file_path):
     latin_words = ["qui", "blanditiis", "praesentium", "voluptatum", "deleniti", "atque,", "corrupti", "quos"]
     with open(file_path, 'w') as large_text_file:
-        for _ in range(10**2):
-            sentence = "".join([latin_words[i % len(latin_words)] + " " for i in range(2**6)])
+        for _ in range(10**3):
+            sentence = "".join([latin_words[i % len(latin_words)] + " " for i in range(2**10)])
             large_text_file.write(sentence + "\n")
 
 @measure_execution_time
@@ -99,19 +99,18 @@ if __name__ == "__main__":
     create_large_text_file(file_path)
 
         
-    _, seq_time = word_counter(file_path)
+    _, seq_counting_time = word_counter(file_path)
 
-    _, mt_time = word_counter_multithread(file_path, num_threads)
+    _, multithread_counting_time = word_counter_multithread(file_path, num_threads)
 
-    _, mp_time = word_counter_multiprocess(file_path, num_processes)
+    _, multiprocess_counting_time = word_counter_multiprocess(file_path, num_processes)
 
-    print(f"Sequential Execution Time: {seq_time:.4f} seconds")
-    print(f"Multithreading Execution Time: {mt_time:.4f} seconds")
-    print(f"Multiprocessing Execution Time: {mp_time:.4f} seconds")
+    print(f"Sequential Execution Time: {seq_counting_time:.6f} sec")
+    print(f"Multithreading Execution Time: {multithread_counting_time:.6f} sec")
+    print(f"Multiprocessing Execution Time: {multiprocess_counting_time:.6f} sec")
 
-    speedup_mt = seq_time / mt_time
-    speedup_mp = seq_time / mp_time
+    multithread_speedup = seq_counting_time / multithread_counting_time
+    multiprocess_speedup = seq_counting_time / multiprocess_counting_time
 
-    print(f"Multithreading Speedup: {speedup_mt:.2f}x")
-    print(f"Multiprocessing Speedup: {speedup_mp:.2f}x")
-    print("=" * 50)
+    print(f"Multithreading Speedup: {multithread_speedup:.2f}x")
+    print(f"Multiprocessing Speedup: {multiprocess_speedup:.2f}x")
